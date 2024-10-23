@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Password Protected Site</title>
+</head>
+<body>
+    <div id="welcome" class="fade-in">So you are here, enter the password, hint is my birth year that is 2010</div>
+    <div id="password-container" class="hidden">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="checkPassword()">Submit</button>
+    </div>
+    <div id="main-content" class="hidden">
+        <p>I am storing any kind of information or message for you here, you can select the date to see if I have left any information, select the date from below:</p>
+        <input type="date" id="date-input">
+        <button onclick="showMessage()">Show Message</button>
+        <div id="message"></div>
+        <div id="comments">
+            <h3>Comments</h3>
+            <textarea id="comment-input" placeholder="Leave a comment"></textarea>
+            <button onclick="addComment()">Comment</button>
+            <div id="comment-section"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
