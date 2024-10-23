@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Hide the content initially
+    // Hide content initially
     document.getElementById('content').style.display = 'none';
   
     // Password Logic
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (password === '2010') {
         document.getElementById('password-container').style.display = 'none';
         document.getElementById('content').style.display = 'block';
-        loadComments(); // Load comments when the user logs in
+        loadComments(); 
       } else {
         alert('Incorrect Password!');
       }
@@ -18,9 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('view-message-button').addEventListener('click', function() {
       const selectedDate = document.getElementById('date-picker').value;
   
-      // For now, we're just displaying a placeholder message. 
-      // You'll replace this with your actual message retrieval logic.
-      fetch(`/message/${selectedDate}`)
+      fetch(`http://localhost:3000/message/${selectedDate}`) // Fetch message from server
         .then(response => response.json())
         .then(data => {
           document.getElementById('message-container').style.display = 'block';
@@ -33,10 +31,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   
     // --- Comments Logic ---
+  
     document.getElementById('post-comment-button').addEventListener('click', function() {
       const commentText = document.getElementById('comment-input').value;
-  
-      fetch('/comments', {
+      fetch('http://localhost:3000/comments', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -44,26 +42,34 @@ document.addEventListener('DOMContentLoaded', function() {
         body: JSON.stringify({ comment: commentText })
       })
       .then(response => response.json())
-      .then(data => {
-   console.log(data);
-        loadComments(); // Reload comments after posting
+   .then(data => {
+        console.log("Comment added:", data);
+        loadComments(); 
       })
-      .catch(error => console.error('Error posting comment:', error));
+      .catch(error => {
+        console.error("Error posting comment:", error);
+        alert("Error posting comment.");
+      });
     });
-  });
   
-  function loadComments() {
-    fetch('/comments')
-      .then(response => response.json())
-      .then(comments => {
-        const commentList = document.getElementById('comment-list');
-        commentList.innerHTML = ''; // Clear the list
+    // Load comments initially
+    loadComments();
   
-        comments.forEach(comment => {
-          const commentElement = document.createElement('li');
-          commentElement.textContent = comment;
-          commentList.appendChild(commentElement);
+    function loadComments() {
+      fetch('http://localhost:3000/comments')
+        .then(response => response.json())
+        .then(data => {
+          const commentsContainer = document.getElementById('comments-container');
+          commentsContainer.innerHTML = '';
+          data.forEach(comment => {
+            const commentElement = document.createElement('p');
+            commentElement.textContent = comment;
+            commentsContainer.appendChild(commentElement);
+          });
+        })
+        .catch(error => {
+          console.error("Error loading comments:", error);
+          alert("Error loading comments.");
         });
-      })
-      .catch(error => console.error('Error loading comments:', error));
-  }
+    }
+  });
